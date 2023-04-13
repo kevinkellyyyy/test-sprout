@@ -3,9 +3,12 @@ import axios from 'axios';
 import bgPokeball1 from '../../assets/pokeball-1.png';
 import bgPokeball2 from '../../assets/pokeball-2.png';
 import { Link } from 'react-router-dom';
+import pokeballLoading from '../../assets/pokeball-pokemon.gif';
+
 
 const Home = () => {
   const [pokemonList, setPokemonList] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     // get from local storage if already fetch home, to make it efficient calling, because
@@ -14,6 +17,7 @@ const Home = () => {
     const savedPokemon = localStorage.getItem('tempPokemon');
     if (savedPokemon) {
       setPokemonList(JSON.parse(savedPokemon));
+      setLoading(false)
     } else {
       axios.get('https://pokeapi.co/api/v2/pokemon?limit=20')
         .then(response => {
@@ -26,6 +30,7 @@ const Home = () => {
                   types: response.data.types.map(type => type.type.name)
                 }
               });
+              setLoading(false)
               setPokemonList(pokemonList);
               localStorage.setItem('tempPokemon', JSON.stringify(pokemonList));
             });
@@ -35,6 +40,14 @@ const Home = () => {
         });
     }
   }, []);
+
+  if (loading) {
+    return (
+      <div className='loading-wrapper'>
+        <img className='pokeball-loading' src={pokeballLoading} alt="pokeball loading"/>
+      </div>
+    );
+  }
 
   return (
     <div className='container'>
