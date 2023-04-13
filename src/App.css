@@ -302,7 +302,19 @@ a {
   height: 70px;
 }
 
+.pokeball-loading {
+  width: 400px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
 @media screen and (max-width: 500px) {
+  .detail-title {
+    font-size: 30px;
+  }
+
   .custom-tabs .nav-link {
     font-size: 12px;
   }
@@ -333,5 +345,57 @@ a {
   
   .about-value {
     font-size: 12px;
+  }
+
+  .about-value-bar {
+    margin-top: -10px;
+    margin-bottom: 20px
+  }
+
+  .evolve-name {
+    font-size: 25px;
+  }
+
+  .evolve-img {
+    margin-top: -30px;
+    height: 200px;
+  }
+
+  .evolve-arrow {
+    margin: 10px 0px;
+    height: 50px;
+  }
+}
+
+@media screen and (min-width: 800px) {
+  .tab-3 {
+    flex-direction: row;
+  }
+  
+  .evolve-arrow {
+    transform: rotate(270deg);
+  }
+
+  .section-img {
+    position: relative;
+    height: 45vh;
+  }
+
+  
+  .section-tabs {
+    position: relative;
+    padding-top: 30px;
+    height: 55vh;
+  }
+
+  .bg-pokeball-cards-detail{
+    height: 250px;
+    width: 250px;
+  }
+  
+  .pokemon-img-detail{
+    height: 450px;
+    width: 450px;
+    transform: translate(-50%, -88%);
   }
 }

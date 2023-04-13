@@ -6,6 +6,7 @@ import Tabs from 'react-bootstrap/Tabs';
 import ProgressBar from 'react-bootstrap/ProgressBar';
 import bgPokeball1 from '../../assets/pokeball-1.png';
 import downArrow from '../../assets/down-arrow.png';
+import pokeballLoading from '../../assets/pokeball-pokemon.gif';
 
 const Details = () => {
   const { id } = useParams();
@@ -43,7 +44,11 @@ const Details = () => {
   }, []);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div className='loading-wrapper'>
+        <img className='pokeball-loading' src={pokeballLoading} alt="pokeball loading"/>
+      </div>
+    );
   }
 
   const mappedAbilities = details.abilities.map((pokemonAbility, index) => {
@@ -86,65 +91,75 @@ const Details = () => {
           justify
         >
           <Tab eventKey="about" title="About" className="custom-tab">
-            <div className='container'>
-              <div className='tab-1 mt-3'>
-                <div className='row'>
-                  <div className='col-4 flex-column d-flex align-items-start'>
-                    <div className='about-variable'>Species</div>
-                    <div className='about-variable'>Height</div>
-                    <div className='about-variable'>Width</div>
-                    <div className='about-variable'>Abilities</div>
-                  </div>
-                  <div className='col-8 flex-column d-flex align-items-start'>
-                    <div className='about-value'>{details.genus}</div>
-                    <div className='about-value'>{convert(details.height/10)} ({details.height/10} m)</div>
-                    <div className='about-value'>{((details.weight/10)/0.45359237).toFixed(1)} lbs ({(details.weight/10)} kg)</div>
-                    <div className='about-value captalize'>{mappedAbilities}</div>
-                  </div>
+            <div className='container mt-5'>
+              <div className='row justify-content-center'>
+                <div className='col-4 col-md-2 flex-column d-flex align-items-start'>
+                  <div className='about-variable'>Species</div>
+                  <div className='about-variable'>Height</div>
+                  <div className='about-variable'>Width</div>
+                  <div className='about-variable'>Abilities</div>
+                </div>
+                <div className='col-8 col-lg-3 col-md-4 flex-column d-flex align-items-start'>
+                  <div className='about-value'>{details.genus}</div>
+                  <div className='about-value'>{convert(details.height/10)} ({details.height/10} m)</div>
+                  <div className='about-value'>{((details.weight/10)/0.45359237).toFixed(1)} lbs ({(details.weight/10)} kg)</div>
+                  <div className='about-value captalize'>{mappedAbilities}</div>
                 </div>
               </div>
             </div>
           </Tab>
-          <Tab eventKey="baseStats" title="Base Stats" className="custom-tab">
-            <div className='container'>
-              <div className='tab-1 mt-3'>
-                {details.stats.map((stat, index) => (
-                  <div className='row' key={index}>
-                  <div className='col-4 flex-column d-flex align-items-start'>
-                    <div className='about-variable'>{stat.stat.name}</div>
-                  </div>
-                  <div className='col-1 flex-column d-flex align-items-start'>
-                    <div className='about-value'>{stat.base_stat}</div>
-                  </div>
-                  <div className='col-7'>
-                    <div className='about-value-bar'><ProgressBar variant={stat.base_stat > 50 ? 'success' : 'danger'} now={stat.base_stat} /></div>
-                  </div>
-                </div>
-                ))}
-              </div>
-            </div>
 
-          </Tab>
-          <Tab eventKey="evolution" title="Evolutions" className="custom-tab">
-            <div className='tab-3'>
-              <div className='evolve-name'>
-                {details?.chain?.species.name}
+          <Tab eventKey="baseStats" title="Base Stats" className="custom-tab">
+            <div className='container mt-5'>
+              {details.stats.map((stat, index) => (
+                <div className='row' key={index}>
+                <div className='col-11 col-sm-4 flex-column d-flex align-items-start'>
+                  <div className='about-variable'>{stat.stat.name}</div>
+                </div>
+                <div className='col-1 col-sm-1 flex-column d-flex align-items-start'>
+                  <div className='about-value'>{stat.base_stat}</div>
+                </div>
+                <div className='col-12 col-sm-7'>
+                  <div className='about-value-bar'><ProgressBar variant={stat.base_stat > 50 ? 'success' : 'danger'} now={stat.base_stat} /></div>
+                </div>
               </div>
-              <img className='evolve-img' src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/${details?.chain?.species.url.split('/')[6]}.png`} alt="pokemon-img"/>
-              <img className='evolve-arrow' src={downArrow} alt="downArrow"/>
-              <div className='evolve-name'>
-                {details?.chain?.evolves_to[0]?.species?.name}
-              </div>
-              <img className='evolve-img' src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/${details?.chain?.evolves_to[0]?.species?.url.split('/')[6]}.png`} alt="pokemon-img"/>
-              <img className='evolve-arrow' src={downArrow} alt="downArrow"/>
-              <div className='evolve-name'>
-                {details?.chain?.evolves_to[0]?.evolves_to[0]?.species?.name}
-              </div>
-              <img className='evolve-img' src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/${details?.chain?.evolves_to[0]?.evolves_to[0]?.species?.url.split('/')[6]}.png`} alt="pokemon-img"/>
+              ))}
             </div>
           </Tab>
+
+          <Tab eventKey="evolution" title="Evolutions" className="custom-tab">
+            <div className='tab-3 mt-5'>
+              <div className='col'>
+                <div className='evolve-name'>
+                  {details?.chain?.species.name}
+                </div>
+                <img className='evolve-img' src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/${details?.chain?.species.url.split('/')[6]}.png`} alt="pokemon-img"/>
+              </div>
+              {/* check if there is first evolution */}
+              {details?.chain?.evolves_to[0]?.species?.name && <>
+                <img className='evolve-arrow' src={downArrow} alt="downArrow"/>
+                <div className='col'>
+                  <div className='evolve-name'>
+                    {details?.chain?.evolves_to[0]?.species?.name}
+                  </div>
+                  <img className='evolve-img' src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/${details?.chain?.evolves_to[0]?.species?.url.split('/')[6]}.png`} alt="pokemon-img"/>
+                </div>
+              </>}
+              {/* check if there is second evolution */}
+              {details?.chain?.evolves_to[0]?.evolves_to[0]?.species?.name && <>
+                <img className='evolve-arrow' src={downArrow} alt="downArrow"/>
+                <div className='col'>
+                  <div className='evolve-name'>
+                    {details?.chain?.evolves_to[0]?.evolves_to[0]?.species?.name}
+                  </div>
+                  <img className='evolve-img' src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/${details?.chain?.evolves_to[0]?.evolves_to[0]?.species?.url.split('/')[6]}.png`} alt="pokemon-img"/>
+                </div>
+              </>}
+            </div>
+          </Tab>
+
           <Tab eventKey="moves" title="Moves" className="custom-tab">
-            <div className='moves-pills captalize'>
+            <div className='moves-pills captalize mt-5'>
               {details.moves.map((pokemonMoves, index) => (
                 <div className='moves px-3 py-1 mb-2' key={index}>{pokemonMoves?.move?.name}</div>
               ))}
